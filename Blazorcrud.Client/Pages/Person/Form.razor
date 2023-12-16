@@ -1,0 +1,79 @@
+@inject Blazorcrud.Client.Shared.PageHistoryState PageHistoryState
+<div class="col-md-4 offset-md-3 mt-7">
+    <div class="card">
+        <h4 class="card-header text-center ">@ButtonText</h4>
+        <div class="card-body ">
+            <EditForm Model="@person" OnValidSubmit="@OnValidSubmit" >
+                <FluentValidator TValidator="PersonValidator" />
+                <div class="form-group row">
+                    <label class="col-sm-4 mt-2 offset-md-1">Grupo :</label>
+                    <div>
+                        <InputText @bind-Value="@person.FirstName" class="form-control col-sm-12" />
+                        <ValidationMessage For="@(() => person.FirstName)" />
+                    </div>
+                </div>
+                    
+                    
+                <div class="form-group row">
+                    <label class="col-sm-4 mt-2 offset-md-1">Descrição :</label>
+                    <div>
+                        <InputText @bind-Value="@person.LastName" class="form-control col-sm-12" />
+                        <ValidationMessage For="@(() => person.LastName)" />
+                    </div>
+                </div>
+                    <div class="form-group row">
+
+                        <label class="col-sm-4 mt-2 offset-md-1">Inclusão :</label>
+                        <div>
+                            <InputText @bind-Value="@person.Gender" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => person.Gender)" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+
+                        <label class="col-sm-4 mt-2 offset-md-1">Usuário :</label>
+                        <div>
+                            <InputText @bind-Value="@person.PhoneNumber" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => person.PhoneNumber)" />
+                        </div>
+
+                    </div>
+                
+
+                <hr/>
+    
+
+                <div class="form-group row justify-content-lg-center">
+                    <button disabled="@loading" class="btn btn-primary ">
+                        @if (loading) 
+                        {
+                            <span class="spinner-border spinner-border-sm mr-1"></span>
+                        }
+                        @ButtonText
+                    </button>
+                    @if (PageHistoryState.CanGoBack()){
+                        <NavLink href="@PageHistoryState.GetGoBackPage()" class="btn btn-link">Voltar</NavLink>
+                    }
+                    else{
+                        <NavLink href="/person/1" class="btn btn-link ">Voltar</NavLink>
+                    }
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+        
+@code {
+    [Parameter]
+    public Person person { get; set; }
+    [Parameter]
+    public string ButtonText { get; set; } = "Save";
+    [Parameter]
+    public bool loading {get; set;} = false;
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+}

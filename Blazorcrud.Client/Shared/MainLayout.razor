@@ -1,0 +1,23 @@
+@inherits LayoutComponentBase
+
+
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a class="nav-link" href="#" data-toggle="dropdown"><img src="/imagem/user.jpg" style="width:40px; border-radius:50%;" /><span class="xp-user-live"></span></a>
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">Sobre</a>
+        </div>
+
+        <article class="content px-4">
+            <Alert />
+            @Body
+        </article>
+    </main>
+</div>
+
+
