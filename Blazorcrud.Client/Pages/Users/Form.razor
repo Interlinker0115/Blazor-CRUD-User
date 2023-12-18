@@ -1,74 +1,87 @@
 @inject Blazorcrud.Client.Shared.PageHistoryState PageHistoryState
+<div class="col-md-4 offset-md-3 mt-7">
+    <div class="card">
+        <h4 class="card-header text-center ">@ButtonText</h4>
+        <div class="card-body ">
+            <EditForm Model="@user" OnValidSubmit="@OnValidSubmit">
+                <FluentValidator TValidator="UserValidator" />
+                <div class="form-group row">
+                    <label class="col-sm-4 mt-2 offset-md-1">First Name :</label>
+                    <div>
+                                    <InputText @bind-Value="@user.FirstName" class="form-control col-sm-12" />
+                        <ValidationMessage For="@(() => user.FirstName)" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 mt-2 offset-md-1">Last Name :</label>
+                        <div>
+                            <InputText @bind-Value="@user.LastName" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => user.LastName)" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 mt-2 offset-md-1">User Name :</label>
+                        <div>
+                            <InputText @bind-Value="@user.Username" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => user.Username)" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 mt-2 offset-md-1">Group Number :</label>
+                        <div>
+                            <InputNumber @bind-Value="@user.GroupNumber" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => user.GroupNumber)" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 mt-2 offset-md-1">Entry Date :</label>
+                        <div>
+                            <InputDate @bind-Value="@user.EntryDate" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => user.EntryDate)" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 mt-2 offset-md-1">Role :</label>
+                        <div>
+                            <InputSelect @bind-Value="@user.Role" class="form-control col-sm-12" >
+                                <option selected value="1">admin</option>
+                                <option selected value="2">user</option>
+                            </InputSelect>
+                            <ValidationMessage For="@(() => user.Role)" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 mt-2 offset-md-1">Password :</label>
+                        <div>
+                            <InputText @bind-Value="@user.Password" type="password" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => user.Password)" />
+                        </div>
+                    </div>
 
-<EditForm Model="@user" OnValidSubmit="@OnValidSubmit">
-    <FluentValidator TValidator="UserValidator" />
-    <div class="form-group">
-        <label>First Name :</label>
-        <div>
-            <InputText @bind-Value="@user.FirstName" class="form-control col-sm-3" />
-            <ValidationMessage For="@(() => user.FirstName)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Last Name :</label>
-        <div>
-            <InputText @bind-Value="@user.LastName" class="form-control col-sm-3" />
-            <ValidationMessage For="@(() => user.LastName)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label>User Name :</label>
-        <div>
-            <InputText @bind-Value="@user.Username" class="form-control col-sm-3" />
-            <ValidationMessage For="@(() => user.Username)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Group Number :</label>
-        <div>
-            <InputNumber @bind-Value="@user.GroupNumber" class="form-control col-sm-3" />
-            <ValidationMessage For="@(() => user.GroupNumber)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Entry Date :</label>
-        <div>
-            <InputDate @bind-Value="@user.EntryDate" class="form-control col-sm-3" />
-            <ValidationMessage For="@(() => user.EntryDate)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Role :</label>
-        <div>
-            <InputNumber @bind-Value="@user.Role" class="form-control col-sm-3" />
-            <ValidationMessage For="@(() => user.Role)" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label>Password :</label>
-        <div>
-            <InputText @bind-Value="@user.Password" type="password" class="form-control col-sm-3" />
-            <ValidationMessage For="@(() => user.Password)" />
-        </div>
-    </div>
+                    <div class="form-group row justify-content-lg-center">
+                        <button disabled="@loading" class="btn btn-primary">
+                            @if (loading) 
+                            {
+                                <span class="spinner-border spinner-border-sm mr-1"></span>
+                            }
+                            @ButtonText
+                        </button>
+                        @if (PageHistoryState.CanGoBack()){
+                            <NavLink href="@PageHistoryState.GetGoBackPage()" class="btn btn-link">Cancel</NavLink>
+                        }
+                        else{
+                            <NavLink href="/user/1" class="btn btn-link">Back</NavLink>
+                        }
+                    </div>
 
-    <div class="form-group">
-        <button disabled="@loading" class="btn btn-primary">
-            @if (loading) 
-            {
-                <span class="spinner-border spinner-border-sm mr-1"></span>
-            }
-            @ButtonText
-        </button>
-        @if (PageHistoryState.CanGoBack()){
-            <NavLink href="@PageHistoryState.GetGoBackPage()" class="btn btn-link">Cancel</NavLink>
-        }
-        else{
-            <NavLink href="/user/1" class="btn btn-link">Back</NavLink>
-        }
-    </div>
+            </EditForm>
 
-</EditForm>
+        </div>
+    </div>
+</div>
+
+
+
 
 @code {
     [Parameter]

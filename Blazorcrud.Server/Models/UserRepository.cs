@@ -3,6 +3,7 @@ using Blazorcrud.Server.Helpers;
 using Blazorcrud.Shared.Data;
 using Blazorcrud.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.Blazor.Data;
 
 namespace Blazorcrud.Server.Models
 {
@@ -38,24 +39,32 @@ namespace Blazorcrud.Server.Models
         public PagedResult<User> GetUsers(string? name, int page)
         {
             int pageSize = 5;
-
+            if(page == 0)
+            {
+                pageSize = _appDbContext.Users.Count();
+                page = 1;
+            }
             if (name != null)
             {
+                
                 return _appDbContext.Users
-                    .Where(u => u.FirstName.Contains(name, StringComparison.CurrentCultureIgnoreCase) ||
-                        u.LastName.Contains(name, StringComparison.CurrentCultureIgnoreCase) || 
-                        u.Username.Contains(name, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(u => u.FirstName.ToLower().Contains(name.ToLower()) ||
+                        u.LastName.ToLower().Contains(name.ToLower()) || 
+                        u.Username.ToLower().Contains(name.ToLower()))
                     .OrderBy(u => u.Username)
                     .GetPaged(page, pageSize);
             }
             else
             {
-                return _appDbContext.Users
+                
+               
+                    return _appDbContext.Users
                     .OrderBy(u => u.Username)
                     .GetPaged(page, pageSize);
+            
             }
         }
-
+        
         public async Task<User?> GetUser(int Id)
         {
             var result = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Id==Id);
@@ -89,9 +98,9 @@ namespace Blazorcrud.Server.Models
         {
             var result = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Id==user.Id);
 
-            // cannot update admin
-            if (result.Username == "admin" || result.Username == "superadmin")
-                throw new AppException("Admin may not be updated");
+            // cannot update superadmin
+            //if (result.Username == "superadmin")
+              //  throw new AppException("Admin may not be updated");
 
             // validate unique
             if (user.Username != result.Username && _appDbContext.Users.Any(u => u.Username == user.Username))
@@ -122,8 +131,8 @@ namespace Blazorcrud.Server.Models
             var result = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Id==Id);
 
             // cannot delete admin
-            if (result.Username == "admin" || result.Username == "superadmin")
-                throw new AppException("Admin may not be deleted");
+           // if (result.Username == "superadmin")
+           //     throw new AppException("Admin may not be deleted");
                 
             if (result!=null)
             {

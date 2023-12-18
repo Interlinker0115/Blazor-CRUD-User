@@ -2,6 +2,7 @@
 @inject Services.IUserService UserService
 @inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
 @inject Blazorcrud.Client.Shared.PageHistoryState PageHistoryState
+@inject IPrintingService PrintingService
 
 <h1>Users</h1>
 <br/>
@@ -26,6 +27,11 @@
                 <i class="oi oi-x" title="clear" aria-hidden="true"></i>
             </button>
         </div>
+        <div class="input-group-btn">
+            <button name="PersonPrintButton" class="btn btn-default" @onclick="PrintClick">
+                <i class="oi oi-print" title="print" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -35,15 +41,16 @@
 }
 else
 {
+   
     <table class="table table-striped">
         <thead>
             <tr>
-                <th style="width:35%">First Name</th>
-                <th style="width:30%">Last Name</th>
-                <th style="width:30%">Username</th>
-                <th style="width:30%">Group Number</th>
-                <th style="width:30%">Role</th>
-                <th style="width:5%"></th>
+                <th style="width:20%">First Name</th>
+                <th style="width:20%">Last Name</th>
+                <th style="width:20%">Username</th>
+                <th style="width:15%">Group Number</th>
+                <th style="width:15%">Role</th>
+                <th style="width:10%"></th>
             </tr>
         </thead>
         <tbody>
@@ -54,27 +61,43 @@ else
                     <td>@user.LastName</td>
                     <td>@user.Username</td>
                     <td>@user.GroupNumber</td>
-                    <td>@user.Role</td>
+                    @if (user.Role == 1) { <td>admin</td>}
+                    else if (user.Role == 2)
+                    {
+                        <td>user</td>
+                    }
+                    else
+                    {
+                        <td>superadmin</td>
+                    }
+                        
+                    
                     <td style="white-space: nowrap">
                         <NavLink href="@($"/user/viewuser/{user.Id}")" class="oi oi-eye text-primary mr-3 nounderline"></NavLink>
-                        @if (LoggedIn && ((CurrentUser.Role < user.Role && CurrentUser.GroupNumber == user.GroupNumber) || (CurrentUser.Username == "superadmin" )))
-                        {
-                            <NavLink href="@($"/user/updateuser/{user.Id}")" class="oi oi-pencil text-warning mr-2 nounderline"></NavLink>
-                            @if (user.Username != CurrentUser.Username)
+                        @if (LoggedIn)
+                        {  
+                            @if(IsOKEdit(user))
                             {
-                                @if (user.IsDeleting)
+                                <NavLink href="@($"/user/updateuser/{user.Id}")" class="oi oi-pencil text-warning mr-2 nounderline"></NavLink>
+                                @if (user.Username != CurrentUser.Username)
                                 {
+                                    @if (user.IsDeleting)
+                                    {
 
-                                    <button @onclick="@(() => DeleteUser(user))" disabled="@user.IsDeleting" class=" btn btn-link oi oi-trash text-danger mr-1 nounderline">
-                                        <span class="spinner-border spinner-border-sm"></span>
-                                    </button>
+                                        <button @onclick="@(() => DeleteUser(user))" disabled="@user.IsDeleting" class=" btn btn-link oi oi-trash text-danger mr-1 nounderline">
+                                            <span class="spinner-border spinner-border-sm"></span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button @onclick="@(() => DeleteUser(user))" disabled="@user.IsDeleting" class=" btn btn-link oi oi-trash text-danger mr-1 nounderline">
+                                            <span></span>
+                                        </button>
+                                    }
+
                                 }
-                                else
-                                {
-                                    <button @onclick="@(() => DeleteUser(user))" disabled="@user.IsDeleting" class=" btn btn-link oi oi-trash text-danger mr-1 nounderline">
-                                        <span></span>
-                                </button>
-                            }}
+
+                            }
                         }
                     </td>
                 </tr> 
@@ -82,6 +105,43 @@ else
         </tbody>
     </table>
     <Pager Result=@users PageChanged=PagerPageChanged />
+    @if(OK){
+    <div id="printable-table" >
+        <table class="table table-striped">
+            <tr>
+                <th style="width:20%">First Name</th>
+                <th style="width:20%">Last Name</th>
+                <th style="width:20%">Username</th>
+                <th style="width:15%">Group Number</th>
+                <th style="width:15%">Role</th>
+                <th style="width:10%"></th>
+            </tr>
+            @foreach (var user in AllUsers.Results)
+            {
+                <tr>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Username</td>
+                    <td>@user.GroupNumber</td>
+                    @if (user.Role == 1)
+                    {
+                        <td>admin</td>
+                    }
+                    else if (user.Role == 2)
+                    {
+                        <td>user</td>
+                    }
+                    else
+                    {
+                        <td>superadmin</td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    }
+            
+     
 }
 
 @code {
@@ -90,25 +150,42 @@ else
     [Parameter]
     public string SearchTerm { get; set; } = string.Empty;
     protected PagedResult<User> users;
-
+    protected PagedResult<User> AllUsers;
+    bool OK = false;
     public bool LoggedIn
     {
         get {return UserService.User != null;}
     }
-    public User CurrentUser
+    public User CurrentUser1
     {
         get{ return UserService.User; }
+    }
+    public User CurrentUser
+    {
+        get;set;
     }
     protected override void OnInitialized()
     {
         PageHistoryState.AddPageToHistory(UriHelper.Uri);
         base.OnInitialized();
     }
-    
+    public bool IsOKEdit(User user)
+    {
+        if (CurrentUser.Role == 0) return true;
+        if (user.GroupNumber != CurrentUser.GroupNumber) return false;
+        if (user.Role <= CurrentUser.Role) return false;
+        return true;
+    }
     protected override async Task OnParametersSetAsync()
     {
+        AllUsers = await UserService.GetUsers(null, "0");
         users = await UserService.GetUsers(null, Page);
         PageHistoryState.AddPageToHistory(UriHelper.Uri);
+        if (LoggedIn)
+        {
+            int id = CurrentUser1.Id;
+            CurrentUser = await UserService.GetUser(id);
+        }
     }
 
     protected async Task SearchBoxKeyPress(KeyboardEventArgs ev)
@@ -151,5 +228,16 @@ else
         await UserService.DeleteUser(user.Id);
         users = await UserService.GetUsers(null, Page);
         StateHasChanged();
+    }
+    public async Task callPrinting()
+    {
+        await PrintingService.Print("printable-table", PrintType.Html);
+    }
+    public async Task PrintClick()
+    {
+        OK = true;
+        await callPrinting();
+        
+        OK = false;
     }
 }

@@ -16,12 +16,19 @@
     bool loading = false;
 
     Person person = new Person{};
-    public User CurrentUser
+    public User CurrentUser1
     {
         get { return UserService.User; }
     }
+    public User CurrentUser
+    {
+        get; set;
+    }
     protected async override Task OnParametersSetAsync()
     {
+       
+        int id = CurrentUser1.Id;
+        CurrentUser = await UserService.GetUser(id);
         person.GroupNumber = CurrentUser.GroupNumber;
         person.Description = "";
         person.EntryDate = CurrentUser.EntryDate;
@@ -33,7 +40,7 @@
         try
         {
             await PersonService.AddPerson(person);
-            AlertService.Success("Person added successfully", keepAfterRouteChange: true);
+            AlertService.Success("Description added successfully", keepAfterRouteChange: true);
             if (PageHistoryState.CanGoBack()){
                 navManager.NavigateTo(PageHistoryState.GetGoBackPage());
             }

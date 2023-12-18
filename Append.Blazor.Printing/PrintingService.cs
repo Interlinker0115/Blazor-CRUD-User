@@ -21,8 +21,7 @@ namespace Append.Blazor.Printing
 
         public async Task Print(PrintOptions options)
         {
-            if (module is null)
-                await ImportModule();
+            await ImportModule();
 
             await module.InvokeVoidAsync("print", new PrintOptionsAdapter(options));
         }

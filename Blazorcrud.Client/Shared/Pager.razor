@@ -39,8 +39,8 @@
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        StartIndex = Math.Max(Result.CurrentPage - 5, 1);
-        FinishIndex = Math.Min(Result.CurrentPage + 5, Result.PageCount);
+        StartIndex = Math.Max(Result.CurrentPage - Result.PageSize, 1);
+        FinishIndex = Math.Min(Result.CurrentPage + Result.PageSize, Result.PageCount);
     }
 
     protected void PagerButtonClicked(int page)

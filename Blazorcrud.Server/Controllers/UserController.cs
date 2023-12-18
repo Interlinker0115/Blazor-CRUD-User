@@ -40,7 +40,7 @@ namespace Blazorcrud.Server.Controllers
         {
             return Ok(_userRepository.GetUsers(name, page));
         }
-
+        
         /// <summary>
         /// Gets a specific user by Id.
         /// </summary>

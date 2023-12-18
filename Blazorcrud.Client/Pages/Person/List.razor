@@ -46,15 +46,15 @@
 }
 else
 {
-      <div class="col">
-        <table class="table table-striped" id="printable-table">
+    
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th style="width:25%">GroupNumber</th>
-                    <th style="width:25%">Description</th>
+                    <th style="width:20%">GroupNumber</th>
+                    <th style="width:30%">Description</th>
                     <th style="width:15%">EntryDate</th>
-                    <th style="width:30%">UserName</th>
-                    <th style="width:5%"></th>
+                    <th style="width:15%">UserName</th>
+                    <th style="width:10%"></th>
                 </tr>
             </thead>
             <tbody>
@@ -89,8 +89,34 @@ else
                 }
             </tbody>
         </table>
-        <Pager Result=@people PageChanged=PagerPageChanged />
+    <Pager Result=@people PageChanged=PagerPageChanged />
+    
+    @if(OK){
+    <div class="col" id="printable-table1">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width:20%">GroupNumber</th>
+                    <th style="width:30%">Description</th>
+                    <th style="width:15%">EntryDate</th>
+                    <th style="width:15%">UserName</th>
+                    <th style="width:10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var person in AllPeople.Results)
+                {
+                    <tr>
+                        <td>@person.GroupNumber</td>
+                        <td>@person.Description</td>
+                        <td>@person.EntryDate</td>
+                        <td>@person.UserName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
+    }
 }
 
 @code {
@@ -99,7 +125,8 @@ else
     [Parameter]
     public string SearchTerm { get; set; } = string.Empty;
     private PagedResult<Person> people;
-
+    private PagedResult<Person> AllPeople;
+    bool OK = false;
 
     public bool LoggedIn
     {
@@ -119,6 +146,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         people = await PersonService.GetPeople(null, Page);
+        AllPeople = await PersonService.GetPeople(null, "0");
         PageHistoryState.AddPageToHistory(UriHelper.Uri);
     }
 
@@ -166,9 +194,10 @@ else
         StateHasChanged();
     }
 
-    public void PrintClick()
+    public async Task PrintClick()
     {
-        
-        PrintingService.Print("printable-table", PrintType.Html);
+        OK = true;
+        await PrintingService.Print("printable-table1", PrintType.Html);
+        OK = false;
     }
 }

@@ -15,15 +15,25 @@
     bool loading = false;
 
     User user = new User();
-    public User CurrentUser
+    public User CurrentUser1
     {
         get { return UserService.User; }
     }
+    public User CurrentUser
+    {
+        get; set;
+    }
     protected async override Task OnParametersSetAsync()
     {
+        
+       int id = CurrentUser1.Id;
+       CurrentUser = await UserService.GetUser(id);
+        
         user.GroupNumber = CurrentUser.GroupNumber;
         user.Role = CurrentUser.Role + 1;
-
+        
+      
+        
     }
     async Task CreateUser()
     {

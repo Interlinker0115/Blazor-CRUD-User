@@ -1,8 +1,26 @@
 ﻿@page "/"
-
+@inject Services.IUserService UserService
 <div class="jumbotron">
-    <h1 class="display-4">Blazor CRUD</h1>
+    @if (!LoggedIn)
+    {
+        <h1 class="display-4">Blazor CRUD</h1>
+    }
+    else
+    {
+        <h1 class="display-4">Welcom @CurrentUser.FirstName @CurrentUser.LastName</h1>
+        <h1 class="display-4">User Name :  @CurrentUser.Username</h1>
+    }
     <p class="lead">Uma estrutura de projeto completa que tem tudo que você precisa para construir seu aplicativo corporativo Blazor WASM.</p>
     <hr class="my-4">
     
 </div>
+@code{
+    public bool LoggedIn
+    {
+        get { return UserService.User != null; }
+    }
+    public User CurrentUser
+    {
+        get { return UserService.User; }
+    }
+}

@@ -48,6 +48,11 @@ namespace Blazorcrud.Server.Models
         public PagedResult<Person> GetPeople(string? name, int page)
         {
             int pageSize = 5;
+            if(page == 0)
+            {
+                pageSize = _appDbContext.Users.Count();
+                page = 1;
+            }
 
             if (name != null)
             {

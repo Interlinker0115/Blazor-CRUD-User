@@ -16,10 +16,7 @@
 
     [Parameter]
     public string Id { get; set; }
-    public User CurrentUser
-    {
-        get { return UserService.User; }
-    }
+    
     Person person = new Person
     {
             Description = "",
@@ -37,7 +34,7 @@
         try
         {
             await PersonService.UpdatePerson(person);
-            AlertService.Success("Person updated successfully", keepAfterRouteChange: true);
+            AlertService.Success("Description updated successfully", keepAfterRouteChange: true);
             if (PageHistoryState.CanGoBack()){
                 navManager.NavigateTo(PageHistoryState.GetGoBackPage());
             }

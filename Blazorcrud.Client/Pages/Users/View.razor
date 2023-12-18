@@ -30,7 +30,18 @@
         </tr>
         <tr>
             <th scope="row">Role</th>
-            <td>@user.Role</td>
+            @if (user.Role == 1)
+            {
+                <td>admin</td>
+            }
+            else if (user.Role == 2)
+            {
+                <td>user</td>
+            }
+            else
+            {
+                <td>superadmin</td>
+            }
         </tr>
     </tbody>
 </table>

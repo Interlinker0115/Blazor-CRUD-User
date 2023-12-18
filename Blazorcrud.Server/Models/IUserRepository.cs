@@ -8,6 +8,8 @@ namespace Blazorcrud.Server.Models
     {
         AuthenticateResponse Authenticate(AuthenticateRequest request);
         PagedResult<User> GetUsers(string? name, int page);
+       
+
         Task<User?> GetUser(int Id);
         Task<User> AddUser(User user);
         Task<User?> UpdateUser(User user);
