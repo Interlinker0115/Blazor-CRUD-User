@@ -6,37 +6,37 @@
             <EditForm Model="@person" OnValidSubmit="@OnValidSubmit" >
                 <FluentValidator TValidator="PersonValidator" />
                 <div class="form-group row">
-                    <label class="col-sm-4 mt-2 offset-md-1">Grupo :</label>
+                    <label class="col-sm-4 mt-2 offset-md-1">Group Number :</label>
                     <div>
-                        <InputText @bind-Value="@person.FirstName" class="form-control col-sm-12" />
-                        <ValidationMessage For="@(() => person.FirstName)" />
+                        <InputNumber @bind-Value="@person.GroupNumber" class="form-control col-sm-12" />
+                        <ValidationMessage For="@(() => person.GroupNumber)" />
                     </div>
                 </div>
                     
                     
                 <div class="form-group row">
-                    <label class="col-sm-4 mt-2 offset-md-1">Descrição :</label>
+                    <label class="col-sm-4 mt-2 offset-md-1">Description :</label>
                     <div>
-                        <InputText @bind-Value="@person.LastName" class="form-control col-sm-12" />
-                        <ValidationMessage For="@(() => person.LastName)" />
+                        <InputText @bind-Value="@person.Description" class="form-control col-sm-12" />
+                        <ValidationMessage For="@(() => person.Description)" />
                     </div>
                 </div>
                     <div class="form-group row">
 
-                        <label class="col-sm-4 mt-2 offset-md-1">Inclusão :</label>
+                        <label class="col-sm-4 mt-2 offset-md-1">EntryDate :</label>
                         <div>
-                            <InputText @bind-Value="@person.Gender" class="form-control col-sm-12" />
-                            <ValidationMessage For="@(() => person.Gender)" />
+                            <InputDate @bind-Value="@person.EntryDate" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => person.EntryDate)" />
                         </div>
 
                     </div>
 
                     <div class="form-group row">
 
-                        <label class="col-sm-4 mt-2 offset-md-1">Usuário :</label>
+                        <label class="col-sm-4 mt-2 offset-md-1">UserName :</label>
                         <div>
-                            <InputText @bind-Value="@person.PhoneNumber" class="form-control col-sm-12" />
-                            <ValidationMessage For="@(() => person.PhoneNumber)" />
+                            <InputText @bind-Value="@person.UserName" class="form-control col-sm-12" />
+                            <ValidationMessage For="@(() => person.UserName)" />
                         </div>
 
                     </div>

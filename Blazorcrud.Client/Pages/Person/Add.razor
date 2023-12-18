@@ -2,6 +2,8 @@
 @attribute [Authorize]
 @inject IAlertService AlertService
 @inject IPersonService PersonService
+@inject Services.IUserService UserService
+
 @inject NavigationManager navManager
 @inject Blazorcrud.Client.Shared.PageHistoryState PageHistoryState
 
@@ -12,14 +14,19 @@
 
 @code {
     bool loading = false;
-    
-    Person person = new Person
+
+    Person person = new Person{};
+    public User CurrentUser
     {
-        FirstName = "",
-        LastName = "",
-        Gender = "",
-        PhoneNumber = ""
-    };
+        get { return UserService.User; }
+    }
+    protected async override Task OnParametersSetAsync()
+    {
+        person.GroupNumber = CurrentUser.GroupNumber;
+        person.Description = "";
+        person.EntryDate = CurrentUser.EntryDate;
+        person.UserName = CurrentUser.Username;
+    }
     async Task CreatePerson()
     {
         loading = true;

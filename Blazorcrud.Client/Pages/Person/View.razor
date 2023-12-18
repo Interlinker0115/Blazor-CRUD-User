@@ -13,20 +13,20 @@
             <td>@person.PersonId</td>
         </tr>*@
         <tr>
-            <th scope="row">Grupo</th>
-            <td>@person.FirstName</td>
+            <th scope="row">GroupNumber</th>
+            <td>@person.GroupNumber</td>
         </tr>
         <tr>
-            <th scope="row">Descrição</th>
-            <td>@person.LastName</td>
+            <th scope="row">Description</th>
+            <td>@person.Description</td>
         </tr>
         <tr>
-            <th scope="row">Inclusão</th>
-            <td>@person.Gender</td>
+            <th scope="row">Entry Date</th>
+            <td>@person.EntryDate</td>
         </tr>
         <tr>
-            <th scope="row">Usuário</th>
-            <td>@person.PhoneNumber</td>
+            <th scope="row">UserName</th>
+            <td>@person.UserName</td>
         </tr>
     </tbody>
 </table>
@@ -46,10 +46,10 @@
 
     Person person = new Person
     {
-        FirstName = "",
-        LastName = "",
-        Gender = "",
-        PhoneNumber = ""
+        GroupNumber = default,
+        Description = "",
+        EntryDate = default,
+        UserName = ""
     };
     
     protected async override Task OnParametersSetAsync()

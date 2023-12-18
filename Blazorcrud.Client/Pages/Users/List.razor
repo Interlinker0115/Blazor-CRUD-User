@@ -41,6 +41,8 @@ else
                 <th style="width:35%">First Name</th>
                 <th style="width:30%">Last Name</th>
                 <th style="width:30%">Username</th>
+                <th style="width:30%">Group Number</th>
+                <th style="width:30%">Role</th>
                 <th style="width:5%"></th>
             </tr>
         </thead>
@@ -51,24 +53,28 @@ else
                     <td>@user.FirstName</td>
                     <td>@user.LastName</td>
                     <td>@user.Username</td>
+                    <td>@user.GroupNumber</td>
+                    <td>@user.Role</td>
                     <td style="white-space: nowrap">
                         <NavLink href="@($"/user/viewuser/{user.Id}")" class="oi oi-eye text-primary mr-3 nounderline"></NavLink>
-                        @if (LoggedIn && user.Username != "admin")
+                        @if (LoggedIn && ((CurrentUser.Role < user.Role && CurrentUser.GroupNumber == user.GroupNumber) || (CurrentUser.Username == "superadmin" )))
                         {
                             <NavLink href="@($"/user/updateuser/{user.Id}")" class="oi oi-pencil text-warning mr-2 nounderline"></NavLink>
-                            
-                            @if (user.IsDeleting) 
+                            @if (user.Username != CurrentUser.Username)
                             {
-                                <button @onclick="@(() => DeleteUser(user))" disabled="@user.IsDeleting" class=" btn btn-link oi oi-trash text-danger mr-1 nounderline">
-                                    <span class="spinner-border spinner-border-sm"></span>
+                                @if (user.IsDeleting)
+                                {
+
+                                    <button @onclick="@(() => DeleteUser(user))" disabled="@user.IsDeleting" class=" btn btn-link oi oi-trash text-danger mr-1 nounderline">
+                                        <span class="spinner-border spinner-border-sm"></span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button @onclick="@(() => DeleteUser(user))" disabled="@user.IsDeleting" class=" btn btn-link oi oi-trash text-danger mr-1 nounderline">
+                                        <span></span>
                                 </button>
-                            }
-                            else
-                            {
-                                <button @onclick="@(() => DeleteUser(user))" disabled="@user.IsDeleting" class=" btn btn-link oi oi-trash text-danger mr-1 nounderline">
-                                    <span></span>
-                                </button>
-                            }
+                            }}
                         }
                     </td>
                 </tr> 
@@ -89,7 +95,10 @@ else
     {
         get {return UserService.User != null;}
     }
-    
+    public User CurrentUser
+    {
+        get{ return UserService.User; }
+    }
     protected override void OnInitialized()
     {
         PageHistoryState.AddPageToHistory(UriHelper.Uri);

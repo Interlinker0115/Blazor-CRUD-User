@@ -13,9 +13,18 @@
 
 @code {
     bool loading = false;
-    
-    User user = new User();
 
+    User user = new User();
+    public User CurrentUser
+    {
+        get { return UserService.User; }
+    }
+    protected async override Task OnParametersSetAsync()
+    {
+        user.GroupNumber = CurrentUser.GroupNumber;
+        user.Role = CurrentUser.Role + 1;
+
+    }
     async Task CreateUser()
     {
         loading = true;

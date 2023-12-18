@@ -50,10 +50,10 @@ else
         <table class="table table-striped" id="printable-table">
             <thead>
                 <tr>
-                    <th style="width:25%">Grupo</th>
-                    <th style="width:25%">Descrição</th>
-                    <th style="width:15%">Inclusão</th>
-                    <th style="width:30%">Usuário</th>
+                    <th style="width:25%">GroupNumber</th>
+                    <th style="width:25%">Description</th>
+                    <th style="width:15%">EntryDate</th>
+                    <th style="width:30%">UserName</th>
                     <th style="width:5%"></th>
                 </tr>
             </thead>
@@ -61,13 +61,13 @@ else
                 @foreach (var person in people.Results)
                 {
                     <tr>
-                        <td>@person.FirstName</td>
-                        <td>@person.LastName</td>
-                        <td>@person.Gender</td>
-                        <td>@person.PhoneNumber</td>
+                        <td>@person.GroupNumber</td>
+                        <td>@person.Description</td>
+                        <td>@person.EntryDate</td>
+                        <td>@person.UserName</td>
                         <td style="white-space: nowrap">
                             <NavLink href="@($"/person/viewperson/{person.PersonId}")" class="oi oi-eye text-primary mr-3 nounderline"></NavLink>
-                            @if (LoggedIn)
+                            @if (LoggedIn && (person.UserName == CurrentUser.Username || CurrentUser.Username == "superadmin"))
                             {
                                 <NavLink href="@($"/person/updateperson/{person.PersonId}")" class="oi oi-pencil text-warning mr-2 nounderline"></NavLink>
                             
@@ -105,7 +105,10 @@ else
     {
         get {return UserService.User != null;}
     }
-
+    public User CurrentUser
+    {
+        get { return UserService.User; }
+    }
     protected override void OnInitialized()
     {
         PageHistoryState.AddPageToHistory(UriHelper.Uri);

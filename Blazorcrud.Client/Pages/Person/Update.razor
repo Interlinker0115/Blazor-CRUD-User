@@ -1,6 +1,7 @@
 @page "/person/updateperson/{id}"
 @attribute [Authorize]
 @inject IAlertService AlertService
+@inject Services.IUserService UserService
 @inject IPersonService PersonService
 @inject NavigationManager navManager
 @inject Blazorcrud.Client.Shared.PageHistoryState PageHistoryState
@@ -12,16 +13,17 @@
 
 @code {
     bool loading = false;
-    
+
     [Parameter]
     public string Id { get; set; }
-
+    public User CurrentUser
+    {
+        get { return UserService.User; }
+    }
     Person person = new Person
     {
-        FirstName = "",
-        LastName = "",
-        Gender = "",
-        PhoneNumber = ""
+            Description = "",
+
     };
     
     protected async override Task OnParametersSetAsync()

@@ -24,6 +24,27 @@
         </div>
     </div>
     <div class="form-group">
+        <label>Group Number :</label>
+        <div>
+            <InputNumber @bind-Value="@user.GroupNumber" class="form-control col-sm-3" />
+            <ValidationMessage For="@(() => user.GroupNumber)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Entry Date :</label>
+        <div>
+            <InputDate @bind-Value="@user.EntryDate" class="form-control col-sm-3" />
+            <ValidationMessage For="@(() => user.EntryDate)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Role :</label>
+        <div>
+            <InputNumber @bind-Value="@user.Role" class="form-control col-sm-3" />
+            <ValidationMessage For="@(() => user.Role)" />
+        </div>
+    </div>
+    <div class="form-group">
         <label>Password :</label>
         <div>
             <InputText @bind-Value="@user.Password" type="password" class="form-control col-sm-3" />

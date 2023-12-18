@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blazorcrud.Server.Models
 {
-    public class PersonRepository:IPersonRepository
+    public class PersonRepository : IPersonRepository
     {
         private readonly AppDbContext _appDbContext;
 
@@ -22,7 +22,7 @@ namespace Blazorcrud.Server.Models
 
         public async Task<Person?> DeletePerson(int personId)
         {
-            var result = await _appDbContext.People.FirstOrDefaultAsync(p => p.PersonId==personId);
+            var result = await _appDbContext.People.FirstOrDefaultAsync(p => p.PersonId == personId);
             if (result is null) return null;
             _appDbContext.People.Remove(result);
             var resu = await _appDbContext.People.FirstOrDefaultAsync(p => p.PersonId == personId);
@@ -34,7 +34,7 @@ namespace Blazorcrud.Server.Models
         public async Task<Person?> GetPerson(int personId)
         {
             var result = await _appDbContext.People
-                .FirstOrDefaultAsync(p => p.PersonId==personId);
+                .FirstOrDefaultAsync(p => p.PersonId == personId);
             if (result != null)
             {
                 return result;
@@ -48,12 +48,12 @@ namespace Blazorcrud.Server.Models
         public PagedResult<Person> GetPeople(string? name, int page)
         {
             int pageSize = 5;
-            
+
             if (name != null)
             {
                 return _appDbContext.People
-                    .Where(p => p.FirstName.ToLower().Contains(name.ToLower()) ||
-                        p.LastName.ToLower().Contains(name.ToLower()))
+                    .Where(p => p.UserName.ToLower().Contains(name.ToLower()) ||
+                        p.UserName.ToLower().Contains(name.ToLower()))
                     .OrderBy(p => p.PersonId)
                     .GetPaged(page, pageSize);
             }
@@ -67,13 +67,13 @@ namespace Blazorcrud.Server.Models
 
         public async Task<Person?> UpdatePerson(Person person)
         {
-            var result = await _appDbContext.People.FirstOrDefaultAsync(p => p.PersonId==person.PersonId);
-            if (result!=null)
+            var result = await _appDbContext.People.FirstOrDefaultAsync(p => p.PersonId == person.PersonId);
+            if (result != null)
             {
                 // Update existing person
                 _appDbContext.Entry(result).CurrentValues.SetValues(person);
-                
-               
+
+
                 await _appDbContext.SaveChangesAsync();
             }
             else
