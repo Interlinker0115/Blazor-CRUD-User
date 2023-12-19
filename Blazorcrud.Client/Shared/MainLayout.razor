@@ -1,5 +1,5 @@
 @inherits LayoutComponentBase
-
+@inject IUserService UserService
 
 
 <div class="page">
@@ -8,9 +8,19 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
+
+        <div class="top-row px-8">
+            @if (LoggedIn)
+            {
+                <div class="row">
+                    <div class ="text-success display-5">Welcome</div>
+                    &ensp;
+                    <div class="text-primary display-5">@UserService.User.FirstName @UserService.User.LastName</div>
+                </div>
+            }
             <a class="nav-link" href="#" data-toggle="dropdown"><img src="/imagem/user.jpg" style="width:40px; border-radius:50%;" /><span class="xp-user-live"></span></a>
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">Sobre</a>
+            
         </div>
 
         <article class="content px-4">
@@ -20,4 +30,10 @@
     </main>
 </div>
 
-
+@code{
+    public bool LoggedIn
+    {
+        get { return UserService.User != null; }
+    }
+}
+}

@@ -32,7 +32,8 @@
         <div class="nav-item px-3 ml-auto">
             @if (LoggedIn)
             {
-                <NavLink href="/user/logout" class="nav-item nav-link"><span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Logout</NavLink>
+                <NavLink href="/user/logout" class="nav-item nav-link"><span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout</NavLink>
+                
             }
             else
             {
@@ -40,8 +41,16 @@
             }
 
         </div>
+        @if (LoggedIn)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="#">
+                    <span class="bi bi-person-nav-menu" aria-hidden="true"></span> @UserService.User.Username
+                </NavLink>
+                
+            </div>
+        }
 
-        
     </nav>
 </div>
 
