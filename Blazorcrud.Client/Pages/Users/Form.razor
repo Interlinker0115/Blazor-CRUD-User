@@ -29,9 +29,13 @@
                     <div class="form-group row">
                         <label class="col-sm-4 mt-2 offset-md-1">Group Number :</label>
                         <div>
-                            <InputNumber @bind-Value="@user.GroupNumber" class="form-control col-sm-12" />
+                            <InputSelect @bind-Value="@user.GroupNumber" class="form-control col-sm-12">
+                                <option selected>1</option>
+                                <option selected>2</option>
+                            </InputSelect>
                             <ValidationMessage For="@(() => user.GroupNumber)" />
                         </div>
+                       
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-4 mt-2 offset-md-1">Entry Date :</label>
